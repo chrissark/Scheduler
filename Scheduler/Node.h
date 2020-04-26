@@ -1,17 +1,16 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "tasks.h"
 #include "PeriodicTask.h"
 using std::string;
 
-// óçåë áèíàðíîãî äåðåâà
+// ÑƒÐ·ÐµÐ» Ð±Ð¸Ð½Ð°Ñ€Ð½Ð¾Ð³Ð¾ Ð´ÐµÑ€ÐµÐ²Ð°
 class Node {
 	friend class Schedule;
 	Task* task;
-	int time; // ïëàíèðóåìîå âðåìÿ èñïîëíåíèÿ
+	int time; // Ð¿Ð»Ð°Ð½Ð¸Ñ€ÑƒÐµÐ¼Ð¾Ðµ Ð²Ñ€ÐµÐ¼Ñ Ð¸ÑÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ
 	Node* left, * right;
-	bool right_is_thread; // îáû÷íûé óêàçàòåëü èëè óêàçàòåëü ïðîøèâêè
-public:
+	bool right_is_thread; // Ð¾Ð±Ñ‹Ñ‡Ð½Ñ‹Ð¹ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð¸Ð»Ð¸ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑŒ Ð¿Ñ€Ð¾ÑˆÐ¸Ð²ÐºÐ¸
 	Node(Task* task, int time)
 	{
 		this->task = task;
@@ -25,6 +24,7 @@ public:
 		printf("Execution time: %i\n", time);
 		if (this->right_is_thread)
 			printf("Right is thread\n");
+		printf("\n\n");
 
 	}
 };

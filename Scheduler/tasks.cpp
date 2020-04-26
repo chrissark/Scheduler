@@ -1,7 +1,7 @@
-#include <cstdio>
+п»ї#include <cstdio>
 #include "tasks.h"
 
-bool Task::extend_deadline(int dt) // продление срока исполнения
+bool Task::extend_deadline(int dt) // РїСЂРѕРґР»РµРЅРёРµ СЃСЂРѕРєР° РёСЃРїРѕР»РЅРµРЅРёСЏ
 {
 	if (dt > 0)
 	{
@@ -12,7 +12,7 @@ bool Task::extend_deadline(int dt) // продление срока исполнения
 
 }
 
-bool Task::change_level(int lvl) //изменение уровня важности задания
+bool Task::change_level(int lvl) //РёР·РјРµРЅРµРЅРёРµ СѓСЂРѕРІРЅСЏ РІР°Р¶РЅРѕСЃС‚Рё Р·Р°РґР°РЅРёСЏ
 {
 	if (lvl > 0)
 	{
@@ -23,7 +23,7 @@ bool Task::change_level(int lvl) //изменение уровня важности задания
 		return false;
 }
 
-void Task::print() const //печать информации о задании
+void Task::print() const //РїРµС‡Р°С‚СЊ РёРЅС„РѕСЂРјР°С†РёРё Рѕ Р·Р°РґР°РЅРёРё
 {
     printf("%s \n %s \n deadline - %ds, importance level - %d \n", id.c_str(), text.c_str(), deadline, importance);
 }
@@ -36,6 +36,13 @@ int Task::get_deadline() const
 int Task::get_importance() const 
 {
 	return importance;
+}
+
+bool Task::exec()
+{
+	this->print();
+	printf("Executed.\n\n");
+	return false;
 }
 
 

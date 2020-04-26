@@ -1,4 +1,4 @@
-#include "Schedule.h"
+ï»¿#include "Schedule.h"
 
 
 
@@ -19,24 +19,32 @@ void Schedule::add_node(Task *t, int time)
 
 		while (p)
 		{
-			parent = p; // ïðè ñäâèãå p ñîõðàíÿåì ðîäèòåëÿ
+			parent = p; // Ð¿Ñ€Ð¸ ÑÐ´Ð²Ð¸Ð³Ðµ p ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»Ñ
 
 			if (new_node->time < p->time)
 			{
-				left_child = p; // èùåì óçåë, ëåâûé ïðåäîê êîòîðîãî - ðîäèòåëü âñòàâëÿåìîãî ýëåìåíòà
+				left_child = p; // Ð¸Ñ‰ÐµÐ¼ ÑƒÐ·ÐµÐ», Ð»ÐµÐ²Ñ‹Ð¹ Ð¿Ñ€ÐµÐ´Ð¾Ðº ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð³Ð¾ - Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒ Ð²ÑÑ‚Ð°Ð²Ð»ÑÐµÐ¼Ð¾Ð³Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
 				p = p->left;
 			}
-			else
+			else if (new_node->time > p->time)
 			{
 				if (p->right_is_thread)
 					break;
 				else p = p->right;
 			}
+			
+			else
+			{
+				dynamic_cast<PeriodicTask *>(t)->skip_task();
+				delete new_node;
+				add_node(t, t->get_deadline());
+				return;
+			}
 		}
 		if (new_node->time < parent->time)
 		{
 			parent->left = new_node;
-			//ïðîøèâêà âïðàâî ýëåìåíòà, âñòàâëåííîãî â ëåâîå ïîääåðåâî
+			//Ð¿Ñ€Ð¾ÑˆÐ¸Ð²ÐºÐ° Ð²Ð¿Ñ€Ð°Ð²Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°, Ð²ÑÑ‚Ð°Ð²Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ð² Ð»ÐµÐ²Ð¾Ðµ Ð¿Ð¾Ð´Ð´ÐµÑ€ÐµÐ²Ð¾
 			new_node->right = parent;
 			new_node->right_is_thread = true;
 		}
@@ -46,13 +54,13 @@ void Schedule::add_node(Task *t, int time)
 			parent->right_is_thread = false;
 			if (left_child)
 			{
-				// ïðîøèâêà ýëåìåíòà, âñòàâëåííîãî â ïðàâîå ïîääåðåâî
-				// ïðè óñëîâèè, ÷òî íàéäåí ïðåäîê, óêàçûâàþùèé ñëåâà íà ðîäèòåëÿ
+				// Ð¿Ñ€Ð¾ÑˆÐ¸Ð²ÐºÐ° ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°, Ð²ÑÑ‚Ð°Ð²Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ Ð² Ð¿Ñ€Ð°Ð²Ð¾Ðµ Ð¿Ð¾Ð´Ð´ÐµÑ€ÐµÐ²Ð¾
+				// Ð¿Ñ€Ð¸ ÑƒÑÐ»Ð¾Ð²Ð¸Ð¸, Ñ‡Ñ‚Ð¾ Ð½Ð°Ð¹Ð´ÐµÐ½ Ð¿Ñ€ÐµÐ´Ð¾Ðº, ÑƒÐºÐ°Ð·Ñ‹Ð²Ð°ÑŽÑ‰Ð¸Ð¹ ÑÐ»ÐµÐ²Ð° Ð½Ð° Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»Ñ
 				new_node->right = left_child;
 				new_node->right_is_thread = true;
 			}
 		}
-		/*
+		
 		new_node->print_node();
 		printf("Parent:\n");
 		parent->print_node();
@@ -61,20 +69,20 @@ void Schedule::add_node(Task *t, int time)
 			printf("My thread: \n");
 			new_node->right->print_node();
 		}
-		*/
+		
 	}
 	
 
 }
-// âûâîä ïëàíà
+// Ð²Ñ‹Ð²Ð¾Ð´ Ð¿Ð»Ð°Ð½Ð°
 void Schedule::show(Node *p) const
 {
-	//ñïóñêàåìñÿ ïî ëåâûì óêàçàòåëÿì äî ìèí. ýëåìåíòà
+	//ÑÐ¿ÑƒÑÐºÐ°ÐµÐ¼ÑÑ Ð¿Ð¾ Ð»ÐµÐ²Ñ‹Ð¼ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑÐ¼ Ð´Ð¾ Ð¼Ð¸Ð½. ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
 	while (p->left)
 	{
 		p = p->left;
 	}
-	//ïðîõîä ïî ïðîøèâêå, ïîêà îíà íå êîí÷èòñÿ
+	//Ð¿Ñ€Ð¾Ñ…Ð¾Ð´ Ð¿Ð¾ Ð¿Ñ€Ð¾ÑˆÐ¸Ð²ÐºÐµ, Ð¿Ð¾ÐºÐ° Ð¾Ð½Ð° Ð½Ðµ ÐºÐ¾Ð½Ñ‡Ð¸Ñ‚ÑÑ
 	while (p)
 	{
 		p->print_node();
@@ -85,38 +93,51 @@ void Schedule::show(Node *p) const
 		else break;
 
 	}
-	if (!p) return;
+	if (!p)
+	{
+		return;
+	}
 	if (p->right)
 	{
 		show(p->right);
 	}
 }
 
+//Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð·Ð°Ð´Ð°Ð½Ð¸Ñ - Ð½Ðµ Ð³Ð¾Ñ‚Ð¾Ð²Ð°
 void Schedule::execute_task()
 {
 	Node* p = root;
-	Node* parent = p;
-	Node* u = nullptr, * s = nullptr;
-	//ïîèñê ìèíèìàëüíîãî ýëåìåíòà
+	Node* parent = p, *u = nullptr;
+	//Ð¸Ñ‰ÐµÐ¼ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ñ Ð½Ð°Ð¸Ð¼ÐµÐ½ÑŒÑˆÐ¸Ð¼ ÐºÐ»ÑŽÑ‡Ð¾Ð¼
 	while (p->left)
 	{
 		parent = p;
 		p = p->left;
 	}
+	// Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÐ¼ Ð·Ð°Ð´Ð°Ð½Ð¸Ðµ
+	// ÐµÑÐ»Ð¸ Ð²ÐµÑ€Ð½ÑƒÐ»Ð¾ÑÑŒ true, Ð·Ð½Ð°Ñ‡Ð¸Ñ‚ Ð·Ð°Ð´Ð°Ð½Ð¸Ðµ Ð¿ÐµÑ€Ð¸Ð¾Ð´Ð¸Ñ‡ÐµÑÐºÐ¾Ðµ --> Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾ Ð² Ð´ÐµÑ€ÐµÐ²Ð¾ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð½Ð¾
+	//Ñ ÐºÐ»ÑŽÑ‡Ð¾Ð¼, ÑƒÐ²ÐµÐ»Ð¸Ñ‡ÐµÐ½Ð½Ñ‹Ð¼ Ð½Ð° Ð¿ÐµÑ€Ð¸Ð¾Ð´
+	if (p->task->exec())
+	{
+		//printf("%i\n\n", p->task->get_deadline());
+		add_node(p->task, p->task->get_deadline());
+	}
 	if (p->right_is_thread)
 	{
+
 		parent->left = nullptr;
+		delete p;
+	}
+	else if (p == root)
+	{
+		root = p->right;
 		delete p;
 	}
 	else
 	{
-		u = s = p->right;
-		while (u->left)
-			u->left;
-		p->task = u->task;
-		p->time = u->time;
-		delete u;
-    }
+		parent->left = p->right;
+		delete p;
+	}
 
 	
 }

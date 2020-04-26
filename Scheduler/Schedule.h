@@ -1,18 +1,18 @@
-#pragma once
+п»ї#pragma once
 #include <string>
 #include "tasks.h"
 #include "PeriodicTask.h"
 #include "Node.h"
 using std::string;
-// План (бинарное дерево, прошитое по возрастанию ключа)
+// РџР»Р°РЅ (Р±РёРЅР°СЂРЅРѕРµ РґРµСЂРµРІРѕ, РїСЂРѕС€РёС‚РѕРµ РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ РєР»СЋС‡Р°)
 class Schedule {
 public:
 	Node* root;
 	Schedule():
 		root(nullptr) { };
 	void add_node(Task *t, int time);
-	void show(Node* p) const; // вывести план
-	void execute_task(); //выполнить задание 
+	void show(Node* p) const; // РІС‹РІРµСЃС‚Рё РїР»Р°РЅ
+	void execute_task(); //РІС‹РїРѕР»РЅРёС‚СЊ Р·Р°РґР°РЅРёРµ 
 
 };
 
