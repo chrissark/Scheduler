@@ -5,6 +5,7 @@ using std::string;
 
 //задания для периодического выполнения
 class PeriodicTask : public Task {
+	// поле deadline - метка ближайшего выполнения
 	int period; // число секунд между запланированными исполнениями
 public:
 
@@ -24,7 +25,7 @@ public:
 	virtual void print() const // печать информации о периодическом задании
 	{
 		this->Task::print();
-		printf(" Period: %i\n", period);
+		printf("Period: %i\n", period);
 	}
 
 	bool exec()

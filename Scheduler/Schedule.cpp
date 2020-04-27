@@ -6,13 +6,21 @@ void Schedule::add_node(Task *t, int time)
 {
 	if (!root)
 	{ 
-		root = new Node(t, time);
-		//root->print_node();
+		root = new Node;
+		root->task = t;
+		root->time = time;
+		root->left = root->right = nullptr;
+		root->right_is_thread = false;
+		//print_node(root);
 		return;
 	}
 	else
 	{
-		Node* new_node = new Node(t, time);
+		Node* new_node = new Node;
+		new_node->task = t;
+		new_node->time = time;
+		new_node->left = new_node->right = nullptr;
+		new_node->right_is_thread = false;
 		Node* p = root;
 		Node* parent = p;
 		Node* left_child = nullptr;
@@ -23,23 +31,16 @@ void Schedule::add_node(Task *t, int time)
 
 			if (new_node->time < p->time)
 			{
-				left_child = p; // ищем узел, левый предок которого - родитель вставляемого элемента
+				left_child = p; // ищем последний узел, у которого имеется левый потомок
 				p = p->left;
 			}
-			else if (new_node->time > p->time)
+			else // если ключи совпали, добавлеем в правое поддерево
 			{
 				if (p->right_is_thread)
 					break;
 				else p = p->right;
 			}
-			
-			else
-			{
-				dynamic_cast<PeriodicTask *>(t)->skip_task();
-				delete new_node;
-				add_node(t, t->get_deadline());
-				return;
-			}
+
 		}
 		if (new_node->time < parent->time)
 		{
@@ -55,28 +56,39 @@ void Schedule::add_node(Task *t, int time)
 			if (left_child)
 			{
 				// прошивка элемента, вставленного в правое поддерево
-				// при условии, что найден предок, указывающий слева на родителя
+				// при условии, что найден предок с левым потомком
 				new_node->right = left_child;
 				new_node->right_is_thread = true;
 			}
 		}
-		
-		new_node->print_node();
+		/*
+		print_node(new_node);
 		printf("Parent:\n");
-		parent->print_node();
+		print_node(parent);
 		if (new_node->right_is_thread)
 		{
 			printf("My thread: \n");
-			new_node->right->print_node();
-		}
+			print_node(new_node->right);
+		}*/
 		
 	}
 	
 
 }
+
+void Schedule::print_Schedule() const
+{
+	printf("--------------- SCHEDULE ----------------\n\n");
+	show(root);
+	printf("-----------------------------------------\n\n");
+}
+
+
 // вывод плана
 void Schedule::show(Node *p) const
 {
+	if (is_empty())
+		return;
 	//спускаемся по левым указателям до мин. элемента
 	while (p->left)
 	{
@@ -85,7 +97,7 @@ void Schedule::show(Node *p) const
 	//проход по прошивке, пока она не кончится
 	while (p)
 	{
-		p->print_node();
+		print_node(p);
 		if (p->right_is_thread)
 		{
 			p = p->right;
@@ -103,11 +115,16 @@ void Schedule::show(Node *p) const
 	}
 }
 
-//выполнение задания - не готова
+
+//выполнение задания
 void Schedule::execute_task()
 {
 	Node* p = root;
-	Node* parent = p, *u = nullptr;
+	Node* parent = p;
+
+	if (is_empty())
+		return;
+
 	//ищем элемент с наименьшим ключом
 	while (p->left)
 	{
@@ -116,28 +133,46 @@ void Schedule::execute_task()
 	}
 	// выполняем задание
 	// если вернулось true, значит задание периодическое --> должно быть добавлено в дерево повторно
-	//с ключом, увеличенным на период
 	if (p->task->exec())
 	{
-		//printf("%i\n\n", p->task->get_deadline());
 		add_node(p->task, p->task->get_deadline());
 	}
+	//удаление задания из списка
 	if (p->right_is_thread)
 	{
-
 		parent->left = nullptr;
-		delete p;
+		delete(p);
 	}
 	else if (p == root)
 	{
 		root = p->right;
-		delete p;
+		delete(p);
 	}
 	else
 	{
 		parent->left = p->right;
-		delete p;
+		delete(p);
 	}
 
 	
 }
+
+bool Schedule::is_empty() const
+{
+	if (!root)
+	{
+		printf("No tasks in schedule.\n");
+		return true;
+	}
+	else return false;
+}
+
+void Schedule::print_node(Node *p) const
+{
+	p->task->print();
+	printf("Execution time: %i\n", p->time);
+	if (p->right_is_thread)
+		printf("Right is thread\n");
+	printf("\n\n");
+}
+

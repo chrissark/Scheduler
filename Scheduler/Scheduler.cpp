@@ -50,9 +50,10 @@ Schedule Scheduler::make_schedule() const
 			continue;
 		exec_time[k-1] = i + 1;
     }
+	/*
 	for (int i = 0; i < d_max; i++)
 		printf("%i ",exec_time[i]);
-	printf("\n");
+	printf("\n");*/
 	Schedule S = Schedule();
 	k = 1;
 	for (auto it = set.rbegin(); it != set.rend(); ++it, k++)
@@ -71,5 +72,6 @@ Schedule Scheduler::make_schedule() const
 	}*/
 	return S;
 }
-	
+
+
 

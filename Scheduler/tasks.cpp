@@ -25,7 +25,9 @@ bool Task::change_level(int lvl) //изменение уровня важнос�
 
 void Task::print() const //печать информации о задании
 {
-    printf("%s \n %s \n deadline - %ds, importance level - %d \n", id.c_str(), text.c_str(), deadline, importance);
+	printf("------\n");
+    printf("ID: %s\nText: %s\ndeadline - %ds, importance level - %d \n", id.c_str(), text.c_str(), deadline, importance);
+	printf("------\n");
 }
 
 int Task::get_deadline() const
