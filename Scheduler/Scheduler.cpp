@@ -11,7 +11,7 @@ using std::vector;
 
 void Scheduler::add_task(Task* t)
 {
-	set.insert(std::make_pair(t->get_importance(), t));
+	set.insert(std::make_pair(t->get_importance(), shared_ptr<Task>(t)));
 }
 
 void Scheduler::print_tasks() const
@@ -23,7 +23,7 @@ void Scheduler::print_tasks() const
 }
 
 //составить план (жадный алгоритм)
-Schedule Scheduler::make_schedule() const
+Schedule* Scheduler::make_schedule() const
 {
 	int N = set.size();
 	vector<int> d;
@@ -54,14 +54,14 @@ Schedule Scheduler::make_schedule() const
 	for (int i = 0; i < d_max; i++)
 		printf("%i ",exec_time[i]);
 	printf("\n");*/
-	Schedule S = Schedule();
+	Schedule* S = new Schedule();
 	k = 1;
 	for (auto it = set.rbegin(); it != set.rend(); ++it, k++)
 		for (int i = 0; i < d_max; i++)
 		{
 			if (exec_time[i] == k)
 			{
-				S.add_node(it->second, i);
+				S->add_node((it->second).get(), i);
 			}
 				//test.insert(std::make_pair(i, it->second));
 		}

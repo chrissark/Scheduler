@@ -5,6 +5,12 @@
 #include "Schedule.h"
 #include "Scheduler.h"
 
+
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
+
 using namespace std;
 
 
@@ -33,39 +39,29 @@ void test_task()
 
 void test_scheduler()
 {
-	Task* t1 = new Task("job1", "Run prog1.exe", 5, 2);
-	Task* t2 = new Task("job2", "Run prog2.exe", 1, 1);
-	PeriodicTask* t3 = new PeriodicTask("job3", "prog3", 11, 1, 2);
-	Task* t4 = new Task("job4", "prog4", 12, 3);
-	PeriodicTask* t5 = new PeriodicTask("job5", "prog5", 2, 1, 5);
-	Task* t6 = new Task("job6", "prog6", 6, 6);
 	Scheduler S = Scheduler();
-	S.add_task(t1);
-	S.add_task(t2);
-	S.add_task(t3);
-	S.add_task(t4);
-	S.add_task(t5);
-	assert(!t6->exec());
-	assert(t5->exec());
-	Schedule Plan = S.make_schedule();
-	Plan.print_Schedule();
-	Plan.execute_task();
-	Plan.execute_task();
-	Plan.execute_task();
-	Plan.execute_task();
-	Plan.print_Schedule();
-	delete t1;
-	delete t2;
-	delete t3;
-	delete t4;
-	delete t5;
-	delete t6;
+	S.add_task(new Task("job1", "Run prog1.exe", 1, 2));
+	S.add_task(new Task("job2", "Run prog2.exe", 2, 1));
+	S.add_task(new PeriodicTask("job3", "prog3", 11, 1, 2));
+	S.add_task(new PeriodicTask("job5", "prog5", 2, 1, 5));
+	S.add_task(new Task("job6", "prog6", 6, 6));
+	Schedule* Plan = S.make_schedule();
+	Plan->print_Schedule();
+	Plan->execute_task();
+	Plan->execute_task();
+	Plan->execute_task();
+	Plan->execute_task();
+	Plan->execute_task();
+	Plan->execute_task();
+	Plan->execute_task();
+	Plan->print_Schedule();
+	delete Plan;
 }
-
 
 int main()
 {
-	test_task();
+	//test_task();
 	test_scheduler();
+	_CrtDumpMemoryLeaks();
 	return 0;
 }

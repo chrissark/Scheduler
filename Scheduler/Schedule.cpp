@@ -2,7 +2,7 @@
 
 
 
-void Schedule::add_node(Task *t, int time)
+void Schedule::add_node(Task* t, int time)
 {
 	if (!root)
 	{ 
@@ -141,17 +141,17 @@ void Schedule::execute_task()
 	if (p->right_is_thread)
 	{
 		parent->left = nullptr;
-		delete(p);
+		delete p;
 	}
 	else if (p == root)
 	{
 		root = p->right;
-		delete(p);
+		delete p;
 	}
 	else
 	{
 		parent->left = p->right;
-		delete(p);
+		delete p;
 	}
 
 	
@@ -176,3 +176,19 @@ void Schedule::print_node(Node *p) const
 	printf("\n\n");
 }
 
+void Schedule::deleteSchedule(Node* p)
+{
+	if (p)
+	{
+		if (!p->right_is_thread)
+			deleteSchedule(p->right);
+		deleteSchedule(p->left);
+
+		delete p;
+	}
+}
+
+Schedule::~Schedule()
+{
+	deleteSchedule(root);
+}
