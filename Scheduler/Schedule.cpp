@@ -183,7 +183,6 @@ void Schedule::deleteSchedule(Node* p)
 		if (!p->right_is_thread)
 			deleteSchedule(p->right);
 		deleteSchedule(p->left);
-
 		delete p;
 	}
 }

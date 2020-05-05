@@ -44,7 +44,6 @@ bool Task::exec()
 {
 	this->print();
 	printf("Executed.\n\n");
-	this->state = true;
 	return false;
 }
 

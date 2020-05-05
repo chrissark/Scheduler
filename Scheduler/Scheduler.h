@@ -3,8 +3,6 @@
 #include <map>
 #include <memory>
 #include "tasks.h"
-#include "PeriodicTask.h"
-#include "Node.h"
 #include "Schedule.h"
 using std::string;
 using std::multimap;

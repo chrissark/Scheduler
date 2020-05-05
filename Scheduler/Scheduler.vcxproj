@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Node.h" />
     <ClInclude Include="PeriodicTask.h" />
     <ClInclude Include="Schedule.h" />
     <ClInclude Include="Scheduler.h" />
